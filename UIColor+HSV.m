@@ -124,7 +124,10 @@ static void HSVtoRGB( CGFloat *r, CGFloat *g, CGFloat *b, CGFloat h, CGFloat s, 
 
 - (CGFloat)brightness {
   CGFloat h, s, v, a;
-  [self getHue:&h saturation:&s brightness:&v alpha:&a];
+  if (![self getHue:&h saturation:&s brightness:&v alpha:&a]) {
+    const CGFloat *c = CGColorGetComponents(self.CGColor);
+    if ([self colorSpaceModel] == kCGColorSpaceModelMonochrome) return c[0];
+  }
   return v;
 }
 

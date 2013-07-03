@@ -225,9 +225,9 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		return 0;
 	}
 	
-	r = MIN(MAX(r, 0.0f), 1.0f);
-	g = MIN(MAX(g, 0.0f), 1.0f);
-	b = MIN(MAX(b, 0.0f), 1.0f);
+	r = fminf(fmaxf(r, 0.0f), 1.0f);
+	g = fminf(fmaxf(g, 0.0f), 1.0f);
+	b = fminf(fmaxf(b, 0.0f), 1.0f);
 	
 	return (UInt32) ((((int)roundf(r * 255)) << 16)
 	     | (((int)roundf(g * 255)) << 8)
@@ -240,10 +240,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 	CGFloat r,g,b,a;
 	if (![self red:&r green:&g blue:&b alpha:&a]) return 0;
 	
-	r = MIN(MAX(self.red, 0.0f), 1.0f);
-	g = MIN(MAX(self.green, 0.0f), 1.0f);
-	b = MIN(MAX(self.blue, 0.0f), 1.0f);
-	a = MIN(MAX(self.alpha, 0.0f), 1.0f);
+	r = fminf(fmaxf(self.red, 0.0f), 1.0f);
+	g = fminf(fmaxf(self.green, 0.0f), 1.0f);
+	b = fminf(fmaxf(self.blue, 0.0f), 1.0f);
+	a = fminf(fmaxf(self.alpha, 0.0f), 1.0f);
 	
 	return (((int)roundf(r * 255)) << 24)
 		 | (((int)roundf(g * 255)) << 16)
@@ -277,10 +277,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		return nil;
 	}
 		
-	return [UIColor colorWithRed:(CGFloat)MAX(0.0f, MIN(1.0f, r * red))
-						   green:(CGFloat)MAX(0.0f, MIN(1.0f, g * green)) 
-							blue:(CGFloat)MAX(0.0f, MIN(1.0f, b * blue))
-						   alpha:(CGFloat)MAX(0.0f, MIN(1.0f, a * alpha))];
+	return [UIColor colorWithRed:(CGFloat)fmaxf(0.0f, fminf(1.0f, r * red))
+						   green:(CGFloat)fmaxf(0.0f, fminf(1.0f, g * green)) 
+							blue:(CGFloat)fmaxf(0.0f, fminf(1.0f, b * blue))
+						   alpha:(CGFloat)fmaxf(0.0f, fminf(1.0f, a * alpha))];
 }
 
 - (UIColor *)colorByAddingRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
@@ -293,10 +293,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		return nil;
 	}
 	
-	return [UIColor colorWithRed:(CGFloat)MAX(0.0f, MIN(1.0f, r + red))
-						   green:(CGFloat)MAX(0.0f, MIN(1.0f, g + green)) 
-							blue:(CGFloat)MAX(0.0f, MIN(1.0f, b + blue))
-						   alpha:(CGFloat)MAX(0.0f, MIN(1.0f, a + alpha))];
+	return [UIColor colorWithRed:(CGFloat)fmaxf(0.0f, fminf(1.0f, r + red))
+						   green:(CGFloat)fmaxf(0.0f, fminf(1.0f, g + green)) 
+							blue:(CGFloat)fmaxf(0.0f, fminf(1.0f, b + blue))
+						   alpha:(CGFloat)fmaxf(0.0f, fminf(1.0f, a + alpha))];
 }
 
 - (UIColor *)colorByLighteningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
@@ -309,10 +309,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		return nil;
 	}
 		
-	return [UIColor colorWithRed:MAX(r, red)
-						   green:MAX(g, green)
-							blue:MAX(b, blue)
-						   alpha:MAX(a, alpha)];
+	return [UIColor colorWithRed:fmaxf(r, red)
+						   green:fmaxf(g, green)
+							blue:fmaxf(b, blue)
+						   alpha:fmaxf(a, alpha)];
 }
 
 - (UIColor *)colorByDarkeningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
@@ -325,10 +325,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		return nil;
 	}
 	
-	return [UIColor colorWithRed:MIN(r, red)
-						   green:MIN(g, green)
-							blue:MIN(b, blue)
-						   alpha:MIN(a, alpha)];
+	return [UIColor colorWithRed:fminf(r, red)
+						   green:fminf(g, green)
+							blue:fminf(b, blue)
+						   alpha:fminf(a, alpha)];
 }
 
 - (UIColor *)colorByMultiplyingBy:(CGFloat)f {
@@ -848,10 +848,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		if (![scanner isAtEnd]) return nil;
 		
 		// Form the color, pinning the numbers into range
-		return [UIColor colorWithRed:MAX(0.0, MIN(1.0, rgb[0] / 255.0f))
-							   green:MAX(0.0, MIN(1.0, rgb[1] / 255.0f))
-								blue:MAX(0.0, MIN(1.0, rgb[2] / 255.0f))
-							   alpha:MAX(0.0, MIN(1.0, alpha))];
+		return [UIColor colorWithRed:fmaxf(0.0, fminf(1.0, rgb[0] / 255.0f))
+							   green:fmaxf(0.0, fminf(1.0, rgb[1] / 255.0f))
+								blue:fmaxf(0.0, fminf(1.0, rgb[2] / 255.0f))
+							   alpha:fmaxf(0.0, fminf(1.0, alpha))];
 		
 	} else if ([scanner scanString:@"hsl(" intoString:nil] || (withAlpha = [scanner scanString:@"hsla(" intoString:nil])) {
 		
@@ -888,10 +888,10 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		if (![scanner isAtEnd]) return nil;
 		
 		// Form the color, pinning the numbers into range
-		return [UIColor colorWithHue:MAX(0.0, MIN(360.0, hue))
-						  saturation:MAX(0.0, MIN(1.0, saturation / 100.0f))
-						   lightness:MAX(0.0, MIN(1.0, lightness / 100.0f))
-							   alpha:MAX(0.0, MIN(1.0, alpha))];
+		return [UIColor colorWithHue:fmaxf(0.0, fminf(360.0, hue))
+						  saturation:fmaxf(0.0, fminf(1.0, saturation / 100.0f))
+						   lightness:fmaxf(0.0, fminf(1.0, lightness / 100.0f))
+							   alpha:fmaxf(0.0, fminf(1.0, alpha))];
 		
 	} else {
 		// Assume it's a css color name
@@ -1009,8 +1009,8 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 	
 	// From Foley and Van Dam
 	
-	CGFloat max = MAX(r, MAX(g, b));
-	CGFloat min = MIN(r, MIN(g, b));
+	CGFloat max = fmaxf(r, fmaxf(g, b));
+	CGFloat min = fminf(r, fminf(g, b));
 	
 	// Brightness
 	v = max;

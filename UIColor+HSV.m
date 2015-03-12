@@ -12,6 +12,7 @@
 /* Functions from Dustin at
  http://stackoverflow.com/questions/5284427/how-do-i-get-the-hue-saturation-and-brightness-from-a-uicolor
  */
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 50000
 static void RGBtoHSV( CGFloat r, CGFloat g, CGFloat b, CGFloat *h, CGFloat *s, CGFloat *v )
 {
   float min, max, delta;
@@ -87,6 +88,7 @@ static void HSVtoRGB( CGFloat *r, CGFloat *g, CGFloat *b, CGFloat h, CGFloat s, 
       break;
   }
 }
+#endif
 
 - (BOOL)canProvideHSBComponents {
 	switch (self.colorSpaceModel) {

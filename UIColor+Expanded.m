@@ -507,7 +507,7 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 
 - (NSString *)hexStringFromColor {
 	
-	return [NSString stringWithFormat:@"%0.6lX", self.rgbHex];
+	return [NSString stringWithFormat:@"%0.6X", (unsigned int)self.rgbHex];
 }
 
 - (NSString *)cssStringFromColor {
@@ -577,7 +577,7 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 
 - (NSString *)hexStringFromColorAndAlpha {
 	
-    return [NSString stringWithFormat:@"%0.8lX", self.rgbaHex];
+    return [NSString stringWithFormat:@"%0.8X", (unsigned int)self.rgbaHex];
 }
 
 + (UIColor *)colorWithString:(NSString *)stringToConvert {
@@ -591,8 +591,13 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 	const NSUInteger kMaxComponents = 4;
 	CGFloat c[kMaxComponents];
 	NSUInteger i = 0;
-	
-	if (![scanner scanFloat:&c[i++]]) {
+    
+#if CGFLOAT_IS_DOUBLE
+    BOOL scanFloatResult = [scanner scanDouble:&c[i++]];
+#else
+    BOOL scanFloatResult = [scanner scanFloat:&c[i++]];
+#endif
+    if (!scanFloatResult) {
 		return nil;
 	}
 	
@@ -607,8 +612,13 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		}
 		
 		if ([scanner scanString:@"," intoString:NULL]) {
-			
-			if (![scanner scanFloat:&c[i++]]) {
+			            
+#if CGFLOAT_IS_DOUBLE
+            BOOL scanFloatResult = [scanner scanDouble:&c[i++]];
+#else
+            BOOL scanFloatResult = [scanner scanFloat:&c[i++]];
+#endif
+            if (!scanFloatResult) {
 				return nil;
 			}
 		} else {
@@ -802,7 +812,7 @@ static NSMutableDictionary *_CrayolaNameCache = nil;
 		if (![scanner scanHexInt:&hex]) return nil;
 		if (![scanner isAtEnd]) return nil;
 		
-		int hexLen = [scanner scanLocation] - 1;
+		NSUInteger hexLen = [scanner scanLocation] - 1;
 		if (hexLen == 3) {
 			// A 3 digit hex num
 			int r = (hex >> 8) & 0xF;
